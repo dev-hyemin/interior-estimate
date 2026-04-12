@@ -1,0 +1,136 @@
+{
+  "floor": [
+    {
+      "id": "floor_001",
+      "name": "강마루",
+      "description": "내구성이 뛰어난 강화 목재 바닥재",
+      "unitPrice": 45000,
+      "laborRate": 0.4,
+      "color": "#C8A882",
+      "textureUrl": "/textures/floor_wood.jpg"
+    },
+    {
+      "id": "floor_002",
+      "name": "LPX 바닥재",
+      "description": "방수 기능의 럭셔리 비닐 바닥재",
+      "unitPrice": 28000,
+      "laborRate": 0.35,
+      "color": "#B8A090",
+      "textureUrl": "/textures/floor_vinyl.jpg"
+    },
+    {
+      "id": "floor_003",
+      "name": "원목마루",
+      "description": "천연 원목 고급 바닥재",
+      "unitPrice": 85000,
+      "laborRate": 0.5,
+      "color": "#8B6914",
+      "textureUrl": "/textures/floor_hardwood.jpg"
+    },
+    {
+      "id": "floor_004",
+      "name": "타일 (600×600)",
+      "description": "욕실/주방 전용 도자기 타일",
+      "unitPrice": 35000,
+      "laborRate": 0.6,
+      "color": "#E8E4DC",
+      "textureUrl": "/textures/floor_tile.jpg"
+    }
+  ],
+  "wall": [
+    {
+      "id": "wall_001",
+      "name": "합지 벽지",
+      "description": "일반 가정용 합지 벽지",
+      "unitPrice": 8000,
+      "laborRate": 0.3,
+      "color": "#F5F0E8",
+      "textureUrl": "/textures/wall_plain.jpg"
+    },
+    {
+      "id": "wall_002",
+      "name": "실크 벽지",
+      "description": "고급 실크 원단 벽지",
+      "unitPrice": 15000,
+      "laborRate": 0.35,
+      "color": "#EDE8E0",
+      "textureUrl": "/textures/wall_silk.jpg"
+    },
+    {
+      "id": "wall_003",
+      "name": "친환경 벽지",
+      "description": "VOC 저방출 친환경 벽지",
+      "unitPrice": 12000,
+      "laborRate": 0.3,
+      "color": "#E8EEE4",
+      "textureUrl": "/textures/wall_eco.jpg"
+    },
+    {
+      "id": "wall_004",
+      "name": "페인트 (수성)",
+      "description": "고급 무광 수성 페인트 (2회 도포)",
+      "unitPrice": 6000,
+      "laborRate": 0.5,
+      "color": "#FAFAF8",
+      "textureUrl": "/textures/wall_paint.jpg"
+    }
+  ],
+  "ceiling": [
+    {
+      "id": "ceiling_001",
+      "name": "천장 도배 (합지)",
+      "description": "천장 전용 합지 벽지",
+      "unitPrice": 7000,
+      "laborRate": 0.4,
+      "color": "#FFFFFF",
+      "textureUrl": "/textures/ceiling_white.jpg"
+    },
+    {
+      "id": "ceiling_002",
+      "name": "석고보드 마감",
+      "description": "석고보드 위 페인트 마감",
+      "unitPrice": 25000,
+      "laborRate": 0.5,
+      "color": "#F8F8F6",
+      "textureUrl": "/textures/ceiling_board.jpg"
+    },
+    {
+      "id": "ceiling_003",
+      "name": "우물천장",
+      "description": "단차를 활용한 우물형 천장 마감",
+      "unitPrice": 45000,
+      "laborRate": 0.6,
+      "color": "#F0F0EE",
+      "textureUrl": "/textures/ceiling_coffers.jpg"
+    }
+  ],
+  "baseboard": [
+    {
+      "id": "baseboard_001",
+      "name": "MDF 걸레받이 (60mm)",
+      "description": "일반 MDF 걸레받이",
+      "unitPrice": 5000,
+      "laborRate": 0.3,
+      "color": "#E8E0D8",
+      "textureUrl": null
+    },
+    {
+      "id": "baseboard_002",
+      "name": "원목 걸레받이 (80mm)",
+      "description": "고급 원목 걸레받이",
+      "unitPrice": 12000,
+      "laborRate": 0.35,
+      "color": "#C8A882",
+      "textureUrl": null
+    },
+    {
+      "id": "baseboard_003",
+      "name": "PVC 걸레받이 (50mm)",
+      "description": "방수 기능 PVC 걸레받이",
+      "unitPrice": 3500,
+      "laborRate": 0.25,
+      "color": "#DEDAD4",
+      "textureUrl": null
+    }
+  ]
+}
