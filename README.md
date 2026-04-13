@@ -17,7 +17,7 @@
 | 스타일링 | Tailwind CSS |
 | 라우팅 | react-router-dom |
 | Backend | Express (Node.js) |
-| AI 분석 | Claude Vision API (claude-opus-4-6) |
+| AI 분석 | Claude Vision API (claude-haiku-4-5-20251001) |
 | 파일 처리 | multer |
 | Rate Limiting | express-rate-limit |
 
@@ -148,7 +148,7 @@ Claude Vision      경고 배너 표시        실시간 비용 계산
 
 ## Claude Vision 프롬프트 설계
 
-- 모델: `claude-opus-4-6` (Vision 지원)
+- 모델: `claude-haiku-4-5-20251001` (Vision 지원)
 - 이미지를 base64로 인코딩해 전송
 - JSON만 응답하도록 강제:
   ```json
