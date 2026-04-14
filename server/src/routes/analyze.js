@@ -33,7 +33,12 @@ router.post('/', upload.single('image'), async (req, res) => {
 
     res.json(result)
   } catch (err) {
-    console.error('Claude API 오류:', err.message)
+    const status = err.status || err.statusCode
+    const detail = err.message || String(err)
+    process.stderr.write(`[Claude API 오류] status=${status ?? 'unknown'} ${detail}\n`)
+    if (status === 400 && detail.includes('credit balance')) {
+      return res.status(503).json({ message: 'API 크레딧이 부족합니다. Anthropic 대시보드에서 충전 후 다시 시도해주세요.' })
+    }
     res.status(500).json({ message: 'AI 분석 중 오류가 발생했습니다.' })
   }
 })
