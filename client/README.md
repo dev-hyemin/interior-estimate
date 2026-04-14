@@ -2,29 +2,26 @@
 
 ## 실행 환경
 
-**Node.js >= 18** 필요. 시스템 Node 버전이 낮으면 아래와 같은 에러가 발생한다:
-
-```
-npm WARN EBADENGINE Unsupported engine {
-  package: 'concurrently@9.x.x',
-  required: { node: '>=18' },
-  current: { node: 'v16.x.x', ... }
-}
-```
-
-nvm을 사용해 버전을 전환한 후 실행한다 (프로젝트 루트에 `.nvmrc`로 v20 지정됨):
+**Node.js >= 18** 필요. nvm으로 관리하며 기본 버전이 v20으로 설정되어 있다.
 
 ```bash
-# 프로젝트 루트에서
-nvm use          # .nvmrc 읽어서 Node 20 자동 선택
+# 프로젝트 루트에서 바로 실행
 npm run dev      # client(5173) + server(3001) 동시 실행
 ```
 
-nvm이 설치되지 않은 경우 먼저 설치:
+nvm이 설치되지 않았거나 Node 버전 에러(`EBADENGINE`)가 발생하는 경우:
+
 ```bash
+# 1. nvm 설치 (미설치 시)
 brew install nvm
-source ~/.nvm/nvm.sh
+
+# 2. ~/.zshrc에 nvm 초기화 코드 추가 후 재시작
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+# 3. Node 20 설치 및 기본값 설정
 nvm install 20
+nvm alias default 20
 ```
 
 ---
