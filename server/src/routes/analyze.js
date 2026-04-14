@@ -40,6 +40,7 @@ router.post('/', upload.single('image'), async (req, res) => {
 
 // multer 에러 처리
 router.use((err, req, res, next) => {
+  console.error('[multer 오류]', err.message)
   res.status(400).json({ message: err.message })
 })
 
