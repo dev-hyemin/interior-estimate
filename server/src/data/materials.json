@@ -83,7 +83,7 @@
       "unitPrice": 7000,
       "laborRate": 0.4,
       "color": "#FFFFFF",
-      "textureUrl": "/textures/ceiling_white.jpg"
+      "textureUrl": null
     },
     {
       "id": "ceiling_002",
@@ -91,8 +91,8 @@
       "description": "석고보드 위 페인트 마감",
       "unitPrice": 25000,
       "laborRate": 0.5,
-      "color": "#F8F8F6",
-      "textureUrl": "/textures/ceiling_board.jpg"
+      "color": "#C8D8C8",
+      "textureUrl": null
     },
     {
       "id": "ceiling_003",
@@ -100,8 +100,8 @@
       "description": "단차를 활용한 우물형 천장 마감",
       "unitPrice": 45000,
       "laborRate": 0.6,
-      "color": "#F0F0EE",
-      "textureUrl": "/textures/ceiling_coffers.jpg"
+      "color": "#D4C4A0",
+      "textureUrl": null
     }
   ],
   "baseboard": [
@@ -131,6 +131,164 @@
       "laborRate": 0.25,
       "color": "#DEDAD4",
       "textureUrl": null
+    }
+  ],
+  "partition": [
+    {
+      "id": "partition_001",
+      "name": "경량 철골 가벽",
+      "description": "석고보드 + 경량 철골 프레임 가벽 (m²당)",
+      "unitPrice": 85000,
+      "laborRate": 0.5,
+      "color": "#D8D0C8",
+      "textureUrl": null,
+      "unit": "m²"
+    },
+    {
+      "id": "partition_002",
+      "name": "유리 파티션",
+      "description": "강화유리 파티션 (m²당)",
+      "unitPrice": 150000,
+      "laborRate": 0.4,
+      "color": "#B8D8E8",
+      "textureUrl": null,
+      "unit": "m²"
+    },
+    {
+      "id": "partition_003",
+      "name": "목재 파티션",
+      "description": "합판 + 목재 프레임 파티션 (m²당)",
+      "unitPrice": 65000,
+      "laborRate": 0.45,
+      "color": "#C8A882",
+      "textureUrl": null,
+      "unit": "m²"
+    }
+  ],
+  "lighting": [
+    {
+      "id": "lighting_001",
+      "name": "LED 다운라이트",
+      "description": "매립형 LED 다운라이트 (개당)",
+      "unitPrice": 35000,
+      "laborRate": 0.4,
+      "color": "#FFF8E0",
+      "textureUrl": null,
+      "unit": "개"
+    },
+    {
+      "id": "lighting_002",
+      "name": "레일 조명",
+      "description": "3등 레일 조명 세트 (세트당)",
+      "unitPrice": 120000,
+      "laborRate": 0.3,
+      "color": "#F0E8D0",
+      "textureUrl": null,
+      "unit": "세트"
+    },
+    {
+      "id": "lighting_003",
+      "name": "간접 조명 (LED 몰딩)",
+      "description": "천장 몰딩 간접 조명 (m당)",
+      "unitPrice": 25000,
+      "laborRate": 0.45,
+      "color": "#FFEEBB",
+      "textureUrl": null,
+      "unit": "m"
+    },
+    {
+      "id": "lighting_004",
+      "name": "샹들리에",
+      "description": "펜던트/샹들리에 조명 (개당)",
+      "unitPrice": 250000,
+      "laborRate": 0.25,
+      "color": "#FFD700",
+      "textureUrl": null,
+      "unit": "개"
+    }
+  ],
+  "tile": [
+    {
+      "id": "tile_001",
+      "name": "욕실 타일 (300×600)",
+      "description": "도기질 욕실 벽·바닥 타일 (m²당)",
+      "unitPrice": 28000,
+      "laborRate": 0.65,
+      "color": "#E8E4DC",
+      "textureUrl": null,
+      "unit": "m²"
+    },
+    {
+      "id": "tile_002",
+      "name": "주방 타일 (300×300)",
+      "description": "주방 벽면 타일 (m²당)",
+      "unitPrice": 22000,
+      "laborRate": 0.6,
+      "color": "#F0EDE8",
+      "textureUrl": null,
+      "unit": "m²"
+    },
+    {
+      "id": "tile_003",
+      "name": "현관 타일 (600×600)",
+      "description": "대형 포세린 현관 타일 (m²당)",
+      "unitPrice": 45000,
+      "laborRate": 0.55,
+      "color": "#C8C0B0",
+      "textureUrl": null,
+      "unit": "m²"
+    },
+    {
+      "id": "tile_004",
+      "name": "천연석 타일",
+      "description": "대리석·석재 타일 (m²당)",
+      "unitPrice": 120000,
+      "laborRate": 0.7,
+      "color": "#D4CCBC",
+      "textureUrl": null,
+      "unit": "m²"
+    }
+  ],
+  "film": [
+    {
+      "id": "film_001",
+      "name": "단색 필름 (무광)",
+      "description": "가구·벽면 단색 무광 필름 (m²당)",
+      "unitPrice": 18000,
+      "laborRate": 0.4,
+      "color": "#E8E0D8",
+      "textureUrl": null,
+      "unit": "m²"
+    },
+    {
+      "id": "film_002",
+      "name": "우드 패턴 필름",
+      "description": "목재 패턴 인테리어 필름 (m²당)",
+      "unitPrice": 25000,
+      "laborRate": 0.4,
+      "color": "#C8A882",
+      "textureUrl": null,
+      "unit": "m²"
+    },
+    {
+      "id": "film_003",
+      "name": "유리 필름 (반투명)",
+      "description": "창호·파티션 반투명 유리 필름 (m²당)",
+      "unitPrice": 15000,
+      "laborRate": 0.35,
+      "color": "#C8DCE8",
+      "textureUrl": null,
+      "unit": "m²"
+    },
+    {
+      "id": "film_004",
+      "name": "대리석 패턴 필름",
+      "description": "대리석 질감 고급 인테리어 필름 (m²당)",
+      "unitPrice": 32000,
+      "laborRate": 0.4,
+      "color": "#D8D0C8",
+      "textureUrl": null,
+      "unit": "m²"
     }
   ]
 }

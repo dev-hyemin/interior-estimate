@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Layout from '../components/Layout'
 import EstimateTable from '../components/estimate/EstimateTable'
@@ -6,7 +7,9 @@ import useEstimateStore from '../store/useEstimateStore'
 
 export default function EstimatePage() {
   const navigate = useNavigate()
-  const { analysisResult, selectedMaterials, costs, customerInfo, setCustomerInfo } = useEstimateStore()
+  const [editMode, setEditMode] = useState(false)
+  const { analysisResult, selectedMaterials, costs, customerInfo, setCustomerInfo, getEffectiveMaterials, quantities } = useEstimateStore()
+  const effectiveMaterials = getEffectiveMaterials()
 
   if (!analysisResult) {
     navigate('/')
@@ -26,14 +29,27 @@ export default function EstimatePage() {
         {/* 왼쪽: 견적 명세 */}
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="px-6 py-4 border-b border-gray-100">
+            <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
               <h3 className="font-semibold text-gray-800">견적 명세</h3>
+              {hasMaterials && (
+                <button
+                  onClick={() => setEditMode((v) => !v)}
+                  className={`text-sm px-3 py-1 rounded-lg border transition-colors ${
+                    editMode
+                      ? 'bg-blue-600 text-white border-blue-600'
+                      : 'text-blue-600 border-blue-300 hover:bg-blue-50'
+                  }`}
+                >
+                  {editMode ? '편집 완료' : '금액 수정'}
+                </button>
+              )}
             </div>
             {hasMaterials ? (
               <EstimateTable
                 selectedMaterials={selectedMaterials}
                 costs={costs}
                 dimensions={analysisResult.dimensions}
+                editable={editMode}
               />
             ) : (
               <div className="p-8 text-center text-gray-400">
@@ -91,8 +107,9 @@ export default function EstimatePage() {
             <PDFDownloadButton
               customerInfo={customerInfo}
               analysisResult={analysisResult}
-              selectedMaterials={selectedMaterials}
+              selectedMaterials={effectiveMaterials}
               costs={costs}
+              quantities={quantities}
             />
           )}
 

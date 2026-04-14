@@ -1,7 +1,7 @@
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import EstimatePDF from './EstimatePDF'
 
-export default function PDFDownloadButton({ customerInfo, analysisResult, selectedMaterials, costs }) {
+export default function PDFDownloadButton({ customerInfo, analysisResult, selectedMaterials, costs, quantities }) {
   const filename = `견적서_${customerInfo.name || '고객'}_${new Date().toLocaleDateString('ko-KR').replace(/\./g, '').replace(/ /g, '')}.pdf`
 
   return (
@@ -12,6 +12,7 @@ export default function PDFDownloadButton({ customerInfo, analysisResult, select
           analysisResult={analysisResult}
           selectedMaterials={selectedMaterials}
           costs={costs}
+          quantities={quantities}
         />
       }
       fileName={filename}

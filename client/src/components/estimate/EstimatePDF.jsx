@@ -12,10 +12,7 @@ import { calcAreas } from '../../utils/roomGeometry'
 // client/public/fonts/NotoSansKR-Regular.ttf 파일이 필요합니다.
 Font.register({
   family: 'NotoSansKR',
-  fonts: [
-    { src: '/fonts/NotoSansKR-Regular.ttf', fontWeight: 400 },
-    { src: '/fonts/NotoSansKR-Bold.ttf', fontWeight: 700 },
-  ],
+  src: '/fonts/NotoSansKR-Regular.ttf',
 })
 
 const styles = StyleSheet.create({
@@ -104,6 +101,10 @@ const CATEGORY_LABELS = {
   wall: '벽지',
   ceiling: '천장재',
   baseboard: '걸레받이',
+  partition: '가벽',
+  lighting: '조명',
+  tile: '타일',
+  film: '필름',
 }
 
 const ROOM_TYPE_LABELS = {
@@ -121,7 +122,13 @@ function fmt(n) {
   return n.toLocaleString('ko-KR') + '원'
 }
 
-export default function EstimatePDF({ customerInfo, analysisResult, selectedMaterials, costs }) {
+const QUANTITY_CATS = ['partition', 'lighting', 'tile', 'film']
+const AREA_UNITS = {
+  floor: 'm²', wall: 'm²', ceiling: 'm²', baseboard: 'm',
+  partition: 'm²', lighting: '개/세트', tile: 'm²', film: 'm²',
+}
+
+export default function EstimatePDF({ customerInfo, analysisResult, selectedMaterials, costs, quantities = {} }) {
   const areas = calcAreas(analysisResult.dimensions)
   const today = new Date()
   const validUntil = new Date(today)
@@ -130,7 +137,7 @@ export default function EstimatePDF({ customerInfo, analysisResult, selectedMate
   const dateStr = (d) =>
     `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`
 
-  const categories = ['floor', 'wall', 'ceiling', 'baseboard']
+  const categories = ['floor', 'wall', 'ceiling', 'baseboard', 'partition', 'lighting', 'tile', 'film']
   const { width, length, height } = analysisResult.dimensions
 
   return (
@@ -196,7 +203,9 @@ export default function EstimatePDF({ customerInfo, analysisResult, selectedMate
               const mat = selectedMaterials[cat]
               if (!mat) return null
               const cost = costs[cat]
-              const area = areas[cat]
+              const area = QUANTITY_CATS.includes(cat)
+                ? (quantities[cat] ?? 0)
+                : (areas[cat] ?? 0)
               return (
                 <View
                   key={cat}
@@ -204,7 +213,7 @@ export default function EstimatePDF({ customerInfo, analysisResult, selectedMate
                 >
                   <Text style={styles.col1}>{CATEGORY_LABELS[cat]}</Text>
                   <Text style={styles.col2}>{mat.name}</Text>
-                  <Text style={styles.col3}>{area.toFixed(1)}m²</Text>
+                  <Text style={styles.col3}>{area.toFixed(1)}{AREA_UNITS[cat]}</Text>
                   <Text style={styles.col4}>{mat.unitPrice.toLocaleString()}</Text>
                   <Text style={styles.col5}>{fmt(cost.material)}</Text>
                   <Text style={styles.col6}>{fmt(cost.labor)}</Text>

@@ -66,6 +66,33 @@ function ColorWalls({ width, length, height, color }) {
   )
 }
 
+// 걸레받이: 4면 벽 하단에 얇은 띠로 표현
+function ColorBaseboard({ width, length, color }) {
+  const H = 0.07  // 70mm
+  const T = 0.015 // 두께
+  const y = H / 2
+  return (
+    <group>
+      <mesh position={[0, y, -length / 2 + T / 2]}>
+        <boxGeometry args={[width, H, T]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+      <mesh position={[0, y, length / 2 - T / 2]}>
+        <boxGeometry args={[width, H, T]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+      <mesh position={[-width / 2 + T / 2, y, 0]}>
+        <boxGeometry args={[T, H, length]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+      <mesh position={[width / 2 - T / 2, y, 0]}>
+        <boxGeometry args={[T, H, length]} />
+        <meshStandardMaterial color={color} />
+      </mesh>
+    </group>
+  )
+}
+
 // --- 텍스처 컴포넌트 (useTexture 무조건 호출 — Hooks 규칙 준수) ---
 
 function TexturedFloor({ width, length, textureUrl }) {
@@ -167,6 +194,12 @@ function Walls({ width, length, height, mat }) {
   )
 }
 
+// --- Baseboard (걸레받이) ---
+function Baseboard({ width, length, mat }) {
+  const color = mat?.color || '#E8E0D8'
+  return <ColorBaseboard width={width} length={length} color={color} />
+}
+
 // --- 메인 컴포넌트 ---
 
 export default function RoomMesh({ dimensions, materials }) {
@@ -177,6 +210,7 @@ export default function RoomMesh({ dimensions, materials }) {
       <Floor width={width} length={length} mat={materials?.floor} />
       <Ceiling width={width} length={length} height={height} mat={materials?.ceiling} />
       <Walls width={width} length={length} height={height} mat={materials?.wall} />
+      <Baseboard width={width} length={length} mat={materials?.baseboard} />
     </group>
   )
 }
