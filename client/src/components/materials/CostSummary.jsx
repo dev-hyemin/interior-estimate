@@ -5,11 +5,17 @@ const LABELS = {
   wall: '벽지',
   ceiling: '천장재',
   baseboard: '걸레받이',
+  partition: '가벽',
+  lighting: '조명',
+  tile: '타일',
+  film: '필름',
 }
 
-export default function CostSummary({ costs, selectedMaterials }) {
-  const categories = ['floor', 'wall', 'ceiling', 'baseboard']
-  const hasMaterials = Object.values(selectedMaterials).some(Boolean)
+const QUANTITY_CATS = new Set(['partition', 'lighting'])
+
+export default function CostSummary({ costs, selectedMaterials, quantities = {} }) {
+  const categories = Object.keys(LABELS).filter((cat) => selectedMaterials[cat])
+  const hasMaterials = categories.length > 0
 
   return (
     <div className="bg-white rounded-xl border border-gray-200 p-4">
@@ -23,17 +29,23 @@ export default function CostSummary({ costs, selectedMaterials }) {
             {categories.map((cat) => {
               const mat = selectedMaterials[cat]
               const cost = costs[cat]
-              if (!mat) return null
+              const isZeroCost = QUANTITY_CATS.has(cat) && (quantities[cat] ?? 0) === 0
 
               return (
                 <div key={cat} className="text-sm">
                   <div className="flex justify-between items-start">
                     <span className="text-gray-600 font-medium">{LABELS[cat]}</span>
-                    <span className="text-gray-800 font-semibold">{formatKRW(cost.material + cost.labor)}</span>
+                    {isZeroCost ? (
+                      <span className="text-xs text-amber-500">견적서에서 수량 입력 필요</span>
+                    ) : (
+                      <span className="text-gray-800 font-semibold">{formatKRW(cost.material + cost.labor)}</span>
+                    )}
                   </div>
                   <div className="flex justify-between text-xs text-gray-400 mt-0.5 pl-2">
                     <span>{mat.name}</span>
-                    <span>자재 {formatKRW(cost.material)} + 시공 {formatKRW(cost.labor)}</span>
+                    {!isZeroCost && (
+                      <span>자재 {formatKRW(cost.material)} + 시공 {formatKRW(cost.labor)}</span>
+                    )}
                   </div>
                 </div>
               )

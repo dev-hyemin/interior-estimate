@@ -38,7 +38,7 @@ function ColorCeiling({ width, length, height, color }) {
   return (
     <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, height, 0]}>
       <planeGeometry args={[width, length]} />
-      <meshStandardMaterial color={color} side={THREE.BackSide} />
+      <meshStandardMaterial color={color} side={THREE.DoubleSide} />
     </mesh>
   )
 }
@@ -118,7 +118,7 @@ function TexturedCeiling({ width, length, height, textureUrl }) {
   return (
     <mesh rotation={[Math.PI / 2, 0, 0]} position={[0, height, 0]}>
       <planeGeometry args={[width, length]} />
-      <meshStandardMaterial map={texture} side={THREE.BackSide} />
+      <meshStandardMaterial map={texture} side={THREE.DoubleSide} />
     </mesh>
   )
 }
