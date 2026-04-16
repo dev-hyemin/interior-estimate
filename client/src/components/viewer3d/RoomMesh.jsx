@@ -200,17 +200,33 @@ function Baseboard({ width, length, mat }) {
   return <ColorBaseboard width={width} length={length} color={color} />
 }
 
+// --- 가벽 (Partition) ---
+function PartitionMesh({ width, length, height, mat }) {
+  if (!mat) return null
+  return (
+    <mesh position={[0, height / 2, 0]}>
+      <boxGeometry args={[width * 0.6, height, 0.15]} />
+      <meshStandardMaterial color={mat.color || '#CCCCCC'} transparent opacity={0.6} />
+    </mesh>
+  )
+}
+
 // --- 메인 컴포넌트 ---
 
 export default function RoomMesh({ dimensions, materials }) {
   const { width = 4.5, length = 6.0, height = 2.4 } = dimensions
 
+  // 타일 선택 시 바닥재 대신 타일 사용, 필름 선택 시 벽지 대신 필름 사용
+  const floorMat = materials?.tile ?? materials?.floor
+  const wallMat = materials?.film ?? materials?.wall
+
   return (
     <group>
-      <Floor width={width} length={length} mat={materials?.floor} />
+      <Floor width={width} length={length} mat={floorMat} />
       <Ceiling width={width} length={length} height={height} mat={materials?.ceiling} />
-      <Walls width={width} length={length} height={height} mat={materials?.wall} />
+      <Walls width={width} length={length} height={height} mat={wallMat} />
       <Baseboard width={width} length={length} mat={materials?.baseboard} />
+      <PartitionMesh width={width} length={length} height={height} mat={materials?.partition} />
     </group>
   )
 }

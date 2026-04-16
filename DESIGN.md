@@ -285,11 +285,9 @@ const message = await client.messages.create({
  ✅ 3D 천장 투명 수정 (DoubleSide)
  ✅ 견적서 단가 인라인 편집
  ✅ 1단계 — 다중 방 추출 (Vision 프롬프트 + 다중 RoomBox 렌더링 + DimensionEditor 방별 편집)
+ ✅ 신규 카테고리 3D 적용 (타일→바닥 오버라이드, 필름→벽 오버라이드, 가벽 반투명 mesh, 조명 색온도)
 
 [다음 작업 순서]
- → Step 1: 신규 카테고리 3D 적용 (타일/필름 오버라이드, 가벽 mesh, 조명 색온도)
-            영향 파일 2개, 리스크 낮음
-
  → Step 2: 2단계 — 벽 좌표 + 문 개구부 (ExtrudeGeometry)
             1단계 안정화 후 진행. 도면 품질에 따라 신뢰도 편차 큼 → fallback 필수
 
