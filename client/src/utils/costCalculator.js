@@ -1,4 +1,4 @@
-import { calcAreas } from './roomGeometry'
+import { calcAreas, calcMultiRoomAreas } from './roomGeometry'
 
 /**
  * 자재비 계산
@@ -14,11 +14,14 @@ function calcItemCost(area, material) {
 
 /**
  * 전체 비용 계산
- * @param {{ floor, wall, ceiling, baseboard }} selectedMaterials
- * @param {{ width, length, height }} dimensions
+ * @param {object} selectedMaterials
+ * @param {object|Array} dimensionsOrRooms - 단일 방 dimensions 또는 rooms[] 배열
+ * @param {object} quantities
  */
-export function calculateCosts(selectedMaterials, dimensions, quantities = {}) {
-  const areas = calcAreas(dimensions)
+export function calculateCosts(selectedMaterials, dimensionsOrRooms, quantities = {}) {
+  const areas = Array.isArray(dimensionsOrRooms)
+    ? calcMultiRoomAreas(dimensionsOrRooms)
+    : calcAreas(dimensionsOrRooms)
 
   const floor = calcItemCost(areas.floor, selectedMaterials.floor)
   const wall = calcItemCost(areas.wall, selectedMaterials.wall)

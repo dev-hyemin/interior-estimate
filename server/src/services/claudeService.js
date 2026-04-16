@@ -2,37 +2,105 @@ const Anthropic = require('@anthropic-ai/sdk')
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY })
 
-const SYSTEM_PROMPT = `당신은 인테리어 도면 분석 전문가입니다.
-업로드된 도면 이미지를 분석하여 방의 종류와 치수를 파악하세요.
-반드시 아래 JSON 형식으로만 응답하세요. 다른 텍스트는 절대 포함하지 마세요.
-
-{
-  "roomType": "living_room",
-  "dimensions": {
-    "width": 4.5,
-    "length": 6.0,
-    "height": 2.4
-  },
-  "confidence": 0.85
+const ROOM_LABEL_MAP = {
+  living_room: '거실', bedroom: '침실', kitchen: '주방', bathroom: '욕실',
+  office: '사무실', dining_room: '식당', study: '서재', hallway: '복도',
+  utility: '다용도실', entrance: '현관', balcony: '발코니',
 }
 
-roomType 가능 값: living_room, bedroom, kitchen, bathroom, office, dining_room, study, hallway
-치수 단위: 미터(m)
-confidence: 0.0~1.0 (분석 신뢰도, 도면이 불명확하면 낮게)
-도면에서 치수를 읽을 수 없으면 한국 표준 방 크기로 추정하고 confidence를 낮게 설정하세요.`
+const SYSTEM_PROMPT = `You are a floor plan analysis expert for Korean interior estimation.
+Analyze the uploaded floor plan image and extract ALL visible rooms.
+Respond ONLY with a single valid JSON object. No other text, no markdown, no code fences.
+
+COORDINATE SYSTEM:
+- Origin (0,0) at bottom-left corner of the entire floor plan bounding box
+- X increases rightward, Y increases upward (depth direction)
+- All measurements in meters
+- Use dimension annotations visible in the image when available
+
+OUTPUT FORMAT (schemaVersion 1):
+{
+  "schemaVersion": 1,
+  "floorPlanBounds": { "width": <total width m>, "depth": <total depth m> },
+  "rooms": [
+    {
+      "id": "r1",
+      "type": "<room type>",
+      "label": "<Korean room name from image, e.g. 거실>",
+      "rect": { "x": <left edge m>, "y": <bottom edge m>, "w": <width m>, "d": <depth m> },
+      "height": <ceiling height m, default 2.4>,
+      "confidence": <0.0-1.0>
+    }
+  ],
+  "overallConfidence": <average of room confidences>
+}
+
+ROOM TYPES: living_room, bedroom, kitchen, bathroom, office, dining_room, study, hallway, utility, entrance, balcony
+
+RULES:
+- Include ALL labeled rooms visible in the floor plan (including 발코니, 현관, 화장실)
+- rect must fit within floorPlanBounds; rooms should not overlap
+- height: use 2.4m if not shown; Korean apartment standard is 2.3-2.8m
+- If dimension annotations are visible (e.g. "3,600" mm), convert to meters (3.6)
+- confidence reflects how clearly that room's boundary and type can be determined`
+
+/**
+ * analysisResult를 schemaVersion 1 (다중 방) 형식으로 정규화
+ * - 구형 단일 방 응답도 rooms[] 로 변환
+ * - legacy 필드(roomType, dimensions, confidence) 항상 포함
+ */
+function normalize(raw) {
+  // 새 형식: rooms[] 있음
+  if (raw.schemaVersion === 1 && Array.isArray(raw.rooms) && raw.rooms.length > 0) {
+    const primary = raw.rooms[0]
+    return {
+      ...raw,
+      // legacy — 기존 코드(DimensionEditor, costCalculator 등)에서 dimensions 접근 가능
+      roomType: raw.roomType ?? primary.type,
+      dimensions: raw.dimensions ?? {
+        width: raw.floorPlanBounds?.width ?? primary.rect.w,
+        length: raw.floorPlanBounds?.depth ?? primary.rect.d,
+        height: primary.height ?? 2.4,
+      },
+      confidence: raw.confidence ?? raw.overallConfidence,
+    }
+  }
+
+  // 구형 형식: roomType + dimensions → rooms[] 로 변환
+  if (raw.roomType && raw.dimensions) {
+    const { width, length, height = 2.4 } = raw.dimensions
+    return {
+      schemaVersion: 1,
+      floorPlanBounds: { width, depth: length },
+      rooms: [{
+        id: 'r1',
+        type: raw.roomType,
+        label: ROOM_LABEL_MAP[raw.roomType] ?? raw.roomType,
+        rect: { x: 0, y: 0, w: width, d: length },
+        height,
+        confidence: raw.confidence ?? 0.5,
+      }],
+      overallConfidence: raw.confidence ?? 0.5,
+      roomType: raw.roomType,
+      dimensions: raw.dimensions,
+      confidence: raw.confidence ?? 0.5,
+    }
+  }
+
+  return raw
+}
 
 /**
  * 이미지 버퍼를 Claude Vision API로 분석
  * @param {Buffer} imageBuffer
  * @param {string} mimeType - 'image/jpeg' | 'image/png'
- * @returns {Promise<{ roomType, dimensions, confidence } | { error: 'parse_failed' }>}
  */
 async function analyzeRoomImage(imageBuffer, mimeType) {
   const base64 = imageBuffer.toString('base64')
 
   const message = await client.messages.create({
     model: 'claude-haiku-4-5-20251001',
-    max_tokens: 512,
+    max_tokens: 1024,
     system: SYSTEM_PROMPT,
     messages: [
       {
@@ -40,15 +108,11 @@ async function analyzeRoomImage(imageBuffer, mimeType) {
         content: [
           {
             type: 'image',
-            source: {
-              type: 'base64',
-              media_type: mimeType,
-              data: base64,
-            },
+            source: { type: 'base64', media_type: mimeType, data: base64 },
           },
           {
             type: 'text',
-            text: '이 도면을 분석하여 JSON 형식으로 응답해주세요.',
+            text: '이 도면을 분석하여 모든 방을 JSON 형식으로 응답해주세요.',
           },
         ],
       },
@@ -58,10 +122,10 @@ async function analyzeRoomImage(imageBuffer, mimeType) {
   const text = message.content[0]?.text || ''
 
   try {
-    // JSON만 추출 (텍스트가 섞여있을 경우 대비)
     const match = text.match(/\{[\s\S]*\}/)
     if (!match) throw new Error('JSON not found')
-    return JSON.parse(match[0])
+    const parsed = JSON.parse(match[0])
+    return normalize(parsed)
   } catch {
     return { error: 'parse_failed', rawResponse: text }
   }

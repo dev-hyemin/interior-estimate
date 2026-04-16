@@ -1,7 +1,7 @@
 /**
  * 방 각 면의 면적(m²)을 계산합니다.
  * @param {{ width: number, length: number, height: number }} dimensions
- * @returns {{ floor, ceiling, wall, baseboard }}
+ * @returns {{ floor, ceiling, wall, baseboard, partition, lighting, tile, film }}
  */
 export function calcAreas(dimensions) {
   const { width = 0, length = 0, height = 0 } = dimensions
@@ -21,4 +21,23 @@ export function calcAreas(dimensions) {
   const film = wall
 
   return { floor, ceiling, wall, baseboard, partition, lighting, tile, film }
+}
+
+/**
+ * schemaVersion 1의 rooms[] 배열에서 전체 면적 합산
+ * @param {Array} rooms - { rect: { w, d }, height }[] 형태
+ * @returns {{ floor, ceiling, wall, baseboard, partition, lighting, tile, film }}
+ */
+export function calcMultiRoomAreas(rooms) {
+  const totals = { floor: 0, ceiling: 0, wall: 0, baseboard: 0, partition: 0, lighting: 0, tile: 0, film: 0 }
+  for (const room of rooms) {
+    const width = room.rect?.w ?? 0
+    const length = room.rect?.d ?? 0
+    const height = room.height ?? 2.4
+    const areas = calcAreas({ width, length, height })
+    for (const key of Object.keys(totals)) {
+      totals[key] += areas[key]
+    }
+  }
+  return totals
 }

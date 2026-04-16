@@ -16,7 +16,7 @@ export default function DesignPage() {
     return null
   }
 
-  const { dimensions } = analysisResult
+  const { dimensions, rooms, floorPlanBounds } = analysisResult
 
   return (
     <Layout>
@@ -29,7 +29,12 @@ export default function DesignPage() {
         {/* 3D 뷰어 */}
         <div className="lg:col-span-2">
           <div className="bg-gray-900 rounded-xl" style={{ height: '420px' }}>
-            <RoomCanvas dimensions={dimensions} materials={selectedMaterials} />
+            <RoomCanvas
+              dimensions={dimensions}
+              materials={selectedMaterials}
+              rooms={rooms}
+              floorPlanBounds={floorPlanBounds}
+            />
           </div>
           <p className="text-xs text-gray-400 mt-2 text-center">
             마우스로 드래그하여 시점을 변경할 수 있습니다.
